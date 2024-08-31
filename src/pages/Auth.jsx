@@ -2,6 +2,7 @@ import reactImg from "../assets/react.svg";
 import { useState } from "react";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import Profile from "../components/profile";
 
 function Auth() {
   const [user, setUser] = useState(null);
@@ -14,6 +15,9 @@ function Auth() {
 
   return (
     <section className=" w-full h-dvh flex items-center justify-center bg-gray-50">
+    
+    {(user) && <Profile name={user.name} email={user.email} picture={user.picture} />}
+    
       <div className=" grid grid-cols-1 md:grid-cols-2 max-w-[1240px] mx-auto px-6 shadow-lg rounded-lg bg-white">
         {/* Left */}
         <div className=" p-8 space-y-2">
