@@ -1,18 +1,16 @@
 import reactImg from "../assets/react.svg";
 import { useState } from "react";
-import { GoogleLogin , googleLogout } from "@react-oauth/google";
+import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 
-
 function Auth() {
-  const [user , setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
   const handleLogout = () => {
     setUser(null);
     googleLogout();
     console.log("🔴 Logged Out");
-
-  }
+  };
 
   return (
     <section className=" w-full h-dvh flex items-center justify-center bg-gray-50">
@@ -33,19 +31,22 @@ function Auth() {
         </div>
 
         {/* Right */}
-        <div className="p-8 my-auto">
-          <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              console.log(credentialResponse);
-              const decoded = jwtDecode(credentialResponse?.credential);
-              console.log(decoded);
-              setUser(decoded)
-            }}
-            onError={() => {
-              console.log("Login Failed");
-            }}
-          />
-          <button onClick={handleLogout}>Logout</button>
+        <div className="p-8 my-auto flex justify-center">
+          {user ? (
+            <button className=" bg-red-300 text-black p-2"
+             onClick={handleLogout}>Logout</button>
+          ) : (
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                const decoded = jwtDecode(credentialResponse?.credential);
+                console.log(decoded);
+                setUser(decoded);
+              }}
+              onError={() => {
+                console.log("Login Failed");
+              }}
+            />
+          )}
         </div>
       </div>
     </section>
