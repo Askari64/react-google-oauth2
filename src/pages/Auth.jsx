@@ -14,7 +14,7 @@ function Auth() {
   };
 
   return (
-    <section className=" w-full h-dvh flex items-center justify-center bg-gray-50">
+    <section className=" w-full h-dvh flex flex-col items-center justify-center bg-gray-50 space-y-4">
     
     {(user) && <Profile name={user.name} email={user.email} picture={user.picture} />}
     
@@ -45,6 +45,7 @@ function Auth() {
                 const decoded = jwtDecode(credentialResponse?.credential);
                 console.log(decoded);
                 setUser(decoded);
+                console.log()
               }}
               onError={() => {
                 console.log("Login Failed");
