@@ -1,14 +1,15 @@
 import reactImg from "../assets/react.svg";
-import { useState } from "react";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import useUserStore from "../store/userStore";
 import Profile from "../components/Profile";
 
 function Auth() {
-  const [user, setUser] = useState(null);
+  
+  const { user, setUser, logoutUser} = useUserStore();
 
   const handleLogout = () => {
-    setUser(null);
+    logoutUser();
     googleLogout();
     console.log("🔴 Logged Out");
   };
