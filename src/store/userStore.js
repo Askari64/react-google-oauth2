@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 // VSCode Intellisense may not work without below JSDoc Comments
 
@@ -19,23 +20,31 @@ import { create } from 'zustand';
  */
 
 /** 
- * Creates a Zustand store for user authentication management.
+ * Creates a Zustand store for user authentication management with persistence.
  * 
  * @type {import('zustand').UseStore<UserStore>}
  */
-const useUserStore = create((set) => ({
-  user: null,
+const useUserStore = create(
+  persist(
+    (set) => ({
+      user: null,
 
-  /**
-   * Sets the user state with the provided user object.
-   * @param {User} newUser - The user object to set as the current user.
-   */
-  setUser: (newUser) => set({ user: newUser }),
+      /**
+       * Sets the user state with the provided user object.
+       * @param {User} newUser - The user object to set as the current user.
+       */
+      setUser: (newUser) => set({ user: newUser }),
 
-  /**
-   * Logs out the user by setting the user state to null.
-   */
-  logoutUser: () => set({ user: null }),
-}));
+      /**
+       * Logs out the user by setting the user state to null.
+       */
+      logoutUser: () => set({ user: null }),
+    }),
+    {
+      name: 'user-storage', // unique name for the storage
+      getStorage: () => localStorage, // use localStorage for persistence
+    }
+  )
+);
 
 export default useUserStore;
