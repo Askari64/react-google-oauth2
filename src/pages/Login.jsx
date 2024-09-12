@@ -1,27 +1,16 @@
 import reactImg from "../assets/react.svg";
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import useUserStore from "../store/userStore";
-import Profile from "../components/Profile";
 import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
-  const { user, setUser, logoutUser } = useUserStore();
+  const { setUser } = useUserStore();
 
   const Navigate = useNavigate();
 
-  const handleLogout = () => {
-    logoutUser();
-    googleLogout();
-    console.log("🔴 Logged Out");
-  };
-
   return (
     <section className=" w-full h-dvh flex flex-col items-center justify-center bg-gray-50 space-y-4">
-      {user && (
-        <Profile name={user.name} email={user.email} picture={user.picture} />
-      )}
-
       <div className=" grid grid-cols-1 md:grid-cols-2 max-w-[1240px] mx-auto px-6 shadow-lg rounded-lg bg-white">
         {/* Left */}
         <div className=" p-8 space-y-2">
@@ -40,27 +29,18 @@ function LoginPage() {
 
         {/* Right */}
         <div className="p-8 my-auto flex justify-center">
-          {user ? (
-            <button
-              className=" bg-red-300 text-black p-2"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
-          ) : (
-            <GoogleLogin
-              onSuccess={(credentialResponse) => {
-                const decoded = jwtDecode(credentialResponse?.credential);
-                console.log(decoded);
-                setUser(decoded);
-                Navigate("/Home")
-                console.log();
-              }}
-              onError={() => {
-                console.log("Login Failed");
-              }}
-            />
-          )}
+          <GoogleLogin
+            onSuccess={(credentialResponse) => {
+              const decoded = jwtDecode(credentialResponse?.credential);
+              console.log(decoded);
+              setUser(decoded);
+              Navigate("/Home");
+              console.log();
+            }}
+            onError={() => {
+              console.log("Login Failed");
+            }}
+          />
         </div>
       </div>
     </section>
