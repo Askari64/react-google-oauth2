@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
 function Card() {
+
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-wrap justify-around gap-8 py-8">
       {Tiers.map((tier, index) => (
@@ -17,7 +21,12 @@ function Card() {
               </li>
             ))}
           </ul>
-          <button className="text-xl font-bold text-green-500 rounded-full border-2 bg-white border-green-500 px-6 py-2 hover:text-white hover:bg-green-500 transition-colors duration-300">
+          <button className="text-xl font-bold text-green-500 rounded-full border-2 bg-white border-green-500 px-6 py-2 hover:text-white hover:bg-green-500 transition-colors duration-300"
+          onClick={() => {
+            if (tier.route) {
+              navigate(tier.route)
+            }
+          }} >
             {tier.price === 0 ? "FREE" : `$ ${tier.price}/month`}
           </button>
         </div>
@@ -37,6 +46,7 @@ const Tiers = [
       "Access to limited resources",
       "Community access",
     ],
+    route: "/free",
   },
   {
     name: "Silver",
@@ -47,6 +57,7 @@ const Tiers = [
       "10GB cloud storage",
       "Community access",
     ],
+    route: null,
   },
   {
     name: "Gold",
@@ -57,5 +68,6 @@ const Tiers = [
       "50GB cloud storage",
       "VIP community access",
     ],
+    route: null,
   },
 ];
