@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./utility/ProtectedRoute";
 import FreePage from "./pages/FreePage";
+import SubscriptionPage from "./pages/SubscriptionPage";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route path="/home" element={<Home />} />
         <Route path="/free" element={<FreePage />} />
+        <Route path="/subscribe/:priceId" element={<SubscriptionPage />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

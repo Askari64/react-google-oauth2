@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-function Card() {
 
+function Card() {
   const navigate = useNavigate();
 
   return (
@@ -21,12 +21,16 @@ function Card() {
               </li>
             ))}
           </ul>
-          <button className="text-xl font-bold text-green-500 rounded-full border-2 bg-white border-green-500 px-6 py-2 hover:text-white hover:bg-green-500 transition-colors duration-300"
-          onClick={() => {
-            if (tier.route) {
-              navigate(tier.route)
-            }
-          }} >
+          <button
+            className="text-xl font-bold text-green-500 rounded-full border-2 bg-white border-green-500 px-6 py-2 hover:text-white hover:bg-green-500 transition-colors duration-300"
+            onClick={() => {
+              if (tier.price > 0) {
+                navigate(`/subscribe/${tier.priceId}`);
+              } else {
+                navigate(tier.route);
+              }
+            }}
+          >
             {tier.price === 0 ? "FREE" : `$ ${tier.price}/month`}
           </button>
         </div>
@@ -57,7 +61,7 @@ const Tiers = [
       "10GB cloud storage",
       "Community access",
     ],
-    route: null,
+    priceId: "prod_QqDkGCmP8HXEww",
   },
   {
     name: "Gold",
@@ -68,6 +72,6 @@ const Tiers = [
       "50GB cloud storage",
       "VIP community access",
     ],
-    route: null,
+    priceId: "prod_Qs4Ar6XScINSoa",
   },
 ];
