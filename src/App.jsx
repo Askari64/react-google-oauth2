@@ -5,6 +5,7 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./utility/ProtectedRoute";
 import FreePage from "./pages/FreePage";
 import SubscriptionPage from "./pages/SubscriptionPage";
+import Completed from "./pages/Completed";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/free" element={<FreePage />} />
         <Route path="/subscribe/:priceId" element={<SubscriptionPage />} />
+        <Route path="/Completed" element={<Completed/>} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

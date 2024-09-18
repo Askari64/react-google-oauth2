@@ -1,51 +1,51 @@
-import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import useUserStore from "../store/userStore";
+import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { useState } from "react";
 
-// eslint-disable-next-line react/prop-types
-const CheckoutForm = ({ selectedPriceId }) => {
+const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
-  const { user } = useUserStore();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [message, setMessage] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const cardElement = elements.getElement(CardElement);
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: "card",
-      card: cardElement,
+    if (!stripe || !elements) {
+      return;
+    }
+
+    setIsProcessing(true);
+
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${window.location.origin}/completed`,
+      },
     });
 
-    if (!error) {
-      const response = await fetch("https://k4dllrexf1.execute-api.ap-south-1.amazonaws.com", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ paymentMethodId: paymentMethod.id, email: user.email, priceId: selectedPriceId }),
-      });
-
-      const subscription = await response.json();
-      console.log(subscription);
+    if (error) {
+      setMessage(error.message);
     } else {
-      console.error(error);
+      setMessage("Payment succeeded!");
     }
+
+    setIsProcessing(false);
   };
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-center text-2xl font-semibold mb-4">Complete Your Subscription</h2>
-      
       <div className="mb-4">
-        <label htmlFor="card" className="block text-sm font-medium text-gray-700">Card Details</label>
-        <CardElement className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+        <PaymentElement />
       </div>
-
-      <button 
-        type="submit" 
-        disabled={!stripe} 
+      <button
+        type="submit"
+        disabled={isProcessing}
         className="w-full mt-5 p-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
       >
-        Subscribe
+        {isProcessing ? "Processing" : "Pay Now"}
       </button>
+      {message && <p>{message}</p>}
     </form>
   );
 };
